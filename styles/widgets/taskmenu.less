@@ -12,6 +12,10 @@
         text-align: center;
         color: @color-taskmenu-button;
 
+        span {
+            font-size: 0.85em;
+        }
+
         &:hover {
             color: @color-taskmenu-button-hover;
         }
@@ -80,6 +84,14 @@
             &:hover {
                 color: @color-taskmenu-action-button-hover;
             }
+        }
+    }
+}
+
+@media screen and (max-width: @screen-width-xs) {
+    #taskmenu {
+        .action-buttons, .special-buttons {
+            display: block;
         }
     }
 }

@@ -1,0 +1,270 @@
+/*** Fonts ***/
+
+@font-face {
+  font-family: 'Icons';
+  src: url("../fonts/fontawesome.woff2") format('woff2'),
+       url("../fonts/fontawesome.woff") format('woff');
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-decoration: inherit;
+  text-transform: none;
+}
+
+/* roboto-regular - greek-ext_greek_latin_cyrillic-ext_latin-ext_cyrillic */
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Roboto'), local('Roboto-Regular'),
+       url('../fonts/roboto-v15-greek-ext_greek_latin_cyrillic-ext_latin-ext_cyrillic-regular.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
+       url('../fonts/roboto-v15-greek-ext_greek_latin_cyrillic-ext_latin-ext_cyrillic-regular.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+}
+
+/* roboto-italic - greek-ext_greek_latin_cyrillic-ext_latin-ext_cyrillic */
+@font-face {
+  font-family: 'Roboto';
+  font-style: italic;
+  font-weight: 400;
+  src: local('Roboto Italic'), local('Roboto-Italic'),
+       url('../fonts/roboto-v15-greek-ext_greek_latin_cyrillic-ext_latin-ext_cyrillic-italic.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
+       url('../fonts/roboto-v15-greek-ext_greek_latin_cyrillic-ext_latin-ext_cyrillic-italic.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+}
+
+/* roboto-700 - greek-ext_greek_latin_cyrillic-ext_latin-ext_cyrillic */
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Roboto Bold'), local('Roboto-Bold'),
+       url('../fonts/roboto-v15-greek-ext_greek_latin_cyrillic-ext_latin-ext_cyrillic-700.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
+       url('../fonts/roboto-v15-greek-ext_greek_latin_cyrillic-ext_latin-ext_cyrillic-700.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+}
+
+/* roboto-700italic - greek-ext_greek_latin_cyrillic-ext_latin-ext_cyrillic */
+@font-face {
+  font-family: 'Roboto';
+  font-style: italic;
+  font-weight: 700;
+  src: local('Roboto Bold Italic'), local('Roboto-BoldItalic'),
+       url('../fonts/roboto-v15-greek-ext_greek_latin_cyrillic-ext_latin-ext_cyrillic-700italic.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
+       url('../fonts/roboto-v15-greek-ext_greek_latin_cyrillic-ext_latin-ext_cyrillic-700italic.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+}
+
+
+/* Reset some Bootstrap style */
+
+body, button, input, optgroup, select, textarea {
+    font-family: Roboto, sans-serif;
+}
+
+button, input, select, textarea {
+    line-height: initial;
+}
+
+
+/*** Font-icons ***/
+
+.font-icon-class {
+    font-size: 1.25em;
+    /*
+        display: inline-block;
+        FIXME: with inline-block we have some problems with icon alignment
+    */
+    display: block;
+    float: left;
+    margin: 0em 0.25rem 0em 0em;
+    width: 1.18em;
+    height: 1em;
+    font-family: 'Icons';
+    font-style: normal;
+    font-weight: normal;
+    text-decoration: inherit;
+    text-align: center;
+    speak: none;
+    font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-font-smoothing: antialiased;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+}
+
+@-webkit-keyframes fa-spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(359deg);
+    transform: rotate(359deg);
+  }
+}
+@keyframes fa-spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(359deg);
+    transform: rotate(359deg);
+  }
+}
+
+.animated-icon-class {
+    -webkit-animation: fa-spin 2s infinite linear;
+    animation: fa-spin 2s infinite linear;
+}
+
+
+/*** Common UI elements ***/
+
+#uploadform,
+.voice {
+    display: none;
+}
+
+html.iframe body {
+    .formcontent {
+        padding: 1em;
+    }
+
+    .formbuttons {
+        padding: 0 1em 1em 1em;
+    }
+}
+
+#rcmdraglayer {
+    min-width: 260px;
+    width: auto !important;
+    width: 260px;
+    background: @color-drag-layer-background;
+    z-index: 250;
+    color: @color-drag-layer;
+    white-space: nowrap;
+    opacity: 0.92;
+}
+
+.listbox .scroller {
+    width: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+
+#folder-selector {
+    overflow-y: auto;
+
+    li a.virtual {
+        opacity: .2;
+    }
+}
+
+#content .watermark {
+    background: url(../images/watermark.jpg) center no-repeat;
+    width: 100%;
+    height: 100%;
+}
+
+.noselect {
+    user-select: none;
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -ms-user-select: none;
+    -webkit-user-select: none;
+}
+
+
+/* TODO: review when decided what css framework to use */
+table.propform {
+    width: 100%;
+
+    .row {
+        margin-right: 0; /* without these the form is too wide causing horizontal scrollbar appearence */
+        margin-left: 0;
+    }
+}
+
+
+/*** Login form ***/
+
+.task-login #content {
+    text-align: center;
+    width: 100%;
+    background: url(../images/watermark.jpg) center -20px no-repeat;
+}
+
+#login-form {
+    margin: auto;
+    width: 95%;
+    max-width: 320px;
+}
+
+
+/*** Addressbook UI ***/
+
+#contacts-table {
+    .contact.readonly td {
+        font-style: italic;
+    }
+
+    td.action {
+        /* TODO */
+        a {
+            /* TODO */
+        }
+    }
+
+    span.email {
+        display: inline;
+        color: #69939e; /* TODO */
+        font-style: italic;
+        margin-left: 0.5em;
+    }
+}
+
+#contactpic { /* TODO */ }
+#contactphoto { /* TODO */ }
+#contacthead { /* TODO */ }
+.contactfieldgroup { /* TODO */ }
+
+
+/*** Settings UI ***/
+
+.skinselection {
+    white-space: nowrap;
+    display: table-row;
+
+    & > span {
+        display: table-cell;
+        vertical-align: middle;
+        padding: 0.1em 0.5em;
+        white-space: normal;
+
+        &:last-child {
+            padding-right: 0;
+        }
+    }
+
+    .skinname {
+        font-weight: bold;
+    }
+
+    .skinlicense,
+    .skinlicense a {
+        font-style: italic;
+        text-decoration: none;
+    }
+
+    .skinlicense a:hover {
+        text-decoration: underline;
+    }
+
+    .skinthumbnail {
+        width: 64px;
+        height: 64px;
+        border: 1px solid #ccc; /* TODO */
+        background: #fff;
+        border-radius: 4px;
+    }
+}
+
