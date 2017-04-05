@@ -10,6 +10,22 @@ body > #layout {
         & > .footer {
             padding: 0 0.5em;
         }
+
+        & > .footer {
+            #listcontrols {
+                &:extend(.font-icon-class);
+                width: auto;
+                height: auto;
+
+                a.listmode:before {
+                    content: @fa-var-list;
+                }
+
+                a.threadmode:before {
+                    content: @fa-var-comments;
+                }
+            }
+        }
     }
 }
 
@@ -59,7 +75,11 @@ ul.treelist li {
     }
 
     td.flags {
+        line-height: 2em;
+        padding: 0 0.4em;
+
         span {
+            height: 1.6em;
             margin-left: 0;
         }
     }
@@ -88,12 +108,6 @@ ul.treelist li {
 
 
 /*** Toolbar widget ***/ // widgets/toolbar.less
-
-.toolbar {
-    a.button {
-        display: inline-flex;
-    }
-}
 
 @media screen and (min-width: (@screen-width-small + 1px)) {
     ul.toolbar > li {
