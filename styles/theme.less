@@ -11,6 +11,7 @@ body > #layout {
             padding: 0 0.5em;
         }
 
+/*
         & > .footer {
             #listcontrols {
                 &:extend(.font-icon-class);
@@ -26,6 +27,7 @@ body > #layout {
                 }
             }
         }
+*/
     }
 }
 
@@ -72,6 +74,10 @@ ul.treelist li {
 .messagelist {
     td.subject {
         padding: 0;
+
+        span.date {
+            top: 0;
+        }
     }
 
     td.flags {
@@ -79,7 +85,7 @@ ul.treelist li {
         padding: 0 0.4em;
 
         span {
-            height: 1.6em;
+            height: 1.7em;
             margin-left: 0;
         }
     }
