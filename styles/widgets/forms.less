@@ -1,18 +1,44 @@
 /*** Common form elements style ***/
 
+#uploadform {
+    display: none;
+}
+
+form.smart-upload,
+input.smart-upload {
+    visibility: hidden;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+}
+
 
 /* TODO: review when decided what css framework to use */
-table.propform {
+.propform {
     width: 100%;
+}
+
+.formcontent {
+    padding: 1em;
 
     .row {
         margin-right: 0; /* without these the form is too wide causing horizontal scrollbar appearence */
         margin-left: 0;
     }
+    .row .input-group {
+        padding-right: 0; /* without these e.g. inputs in compose screen are not aligned properly */
+        padding-left: 0;
+    }
 }
+
+.formbuttons {
+    padding: 0 1em 1em 1em;
+}
+
 
 /* Some common icons for "iconized inputs" */
 .input-group-addon.icon {
+    text-decoration: none;
 
     &:before {
         &:extend(.font-icon-class);
@@ -28,6 +54,19 @@ table.propform {
     &.host:before {
         content: @fa-var-home;
     }
+    &.cancel:before {
+        content: @fa-var-close;
+    }
+    &.edit:before {
+        content: @fa-var-pencil;
+    }
+    &.add:before {
+        content: @fa-var-plus;
+    }
+
+    .inner {
+        display: none;
+    }
 }
 
 
@@ -37,6 +76,7 @@ td.editfield { width: 99%;  /* TODO */ }
 /*** Smart recipient input field ***/
 
 .recipient-input {
+    display: block !important; /* overwrites Bootstrap */
     min-height: 2.4em;
 /*    padding: 0.2em 0.5em; */
 
@@ -64,6 +104,12 @@ td.editfield { width: 99%;  /* TODO */ }
         text-indent: -5000rem;
         display: inline-block;
         width: 0;
+    }
+
+    .quotes {
+        position: absolute;
+        width: 0;
+        opacity: 0;
     }
 
     a.button.icon:before {

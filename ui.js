@@ -146,6 +146,14 @@ function rcube_elastic_ui()
         }
 
         $('[data-recipient-input]').each(function() { recipient_input(this); });
+
+        // Show input elements with non-empty value
+        // These event handlers need to be registered before rcmail 'init' event
+        $('#_cc, #_bcc, #_replyto, #_followupto', $('.compose-headers')).each(function() {
+            $(this).on('change', function() {
+                $('#compose' + $(this).attr('id'))[this.value ? 'removeClass' : 'addClass']('hidden');
+            });
+        });
     };
 
     /**
@@ -244,6 +252,7 @@ function rcube_elastic_ui()
     {
         $('input.button,button', context || document).addClass('btn').not('.btn-primary,.primary,.mainaction').addClass('btn-secondary');
         $('input.button.mainaction,button.primary,button.mainaction', context || document).addClass('btn-primary');
+        $('button.btn.delete').addClass('btn-danger');
 
         $.each(['warning', 'error'], function() {
             var type = this;
@@ -273,6 +282,35 @@ function rcube_elastic_ui()
             }
 
             row.addClass(row_classes.join(' '));
+        });
+
+        // Testing Bootstrap Tabs on contact info/edit page
+        // Tabs do not scale nicely on very small screen, so can be used
+        // only with small number of tabs with short text labels
+        // TODO: Should we use Accordion widget instead on mobile?
+        $('.tabbed', context).each(function(idx, item) {
+            var tabs = [], nav = $('<ul>').attr({'class': 'nav nav-tabs', role: 'tablist'});
+
+            $(this).addClass('tab-content').children('fieldset').each(function(i, fieldset) {
+                var tab, id = 'tab' + idx + '-' + i;
+
+                $(fieldset).addClass('tab-pane').attr({id: id, role: 'tabpanel'});
+
+                tab = $('<li>').addClass('nav-item').append(
+                    $('<a>').addClass('nav-link')
+                        .attr({role: 'tab', 'href': '#' + id})
+                        .text($('legend:first', fieldset).text())
+                        .click(function() { $(this).tab('show'); })
+                );
+
+                $('legend:first', fieldset).hide();
+                tabs.push(tab);
+            });
+
+            // create the navigation bar
+            nav.append(tabs).insertBefore(item);
+            // activate the first tab
+            $('a.nav-link:first', nav).click();
         });
 
         // Make logon form prettier
@@ -910,7 +948,7 @@ function rcube_elastic_ui()
             else {
                 list.prop('disabled', false).prop('checked', false);
                 for (n in mods) {
-                    $('#s_mod_' + n).prop('checked', true);
+                    $('#s_mod_' + n, obj).prop('checked', true);
                 }
             }
         }
@@ -1062,13 +1100,13 @@ function rcube_elastic_ui()
      */
     function recipient_input(obj)
     {
-        var input;
+        var input, ac_props;
 
         var insert_recipient = function(name, email) {
             var recipient = $('<span>'),
                 last = input.children('span:last'),
                 name_element = $('<span>').attr({'class': 'name', contenteditable: false})
-                    .text(recipient_input_name(name || email)),
+                    .html(recipient_input_name(name || email)),
                 email_element = $('<span>').attr({'class': 'email', contenteditable: false}),
                 // TODO: should the 'close' link have tabindex?
                 link = $('<a>').attr({'class': 'button icon remove', contenteditable: false})
@@ -1085,12 +1123,7 @@ function rcube_elastic_ui()
             }
 
             email_element.text((name ? email : '') + rcmail.env.recipients_separator);
-
-            recipient.attr({
-                    'class': 'recipient',
-                    contenteditable: false,
-                    title: name ? (name + email) : null
-                })
+            recipient.attr({'class': 'recipient', contenteditable: false, title: name ? (name + email) : null})
                 .append([name_element, email_element, link]);
 
             if (last.length) {
@@ -1103,6 +1136,12 @@ function rcube_elastic_ui()
             }
         };
 
+        // get text input node from inside of the widget
+        var get_text_node = function() {
+            return $(input).contents().filter(function() { return this.nodeType == 3; }).last()[0];
+        };
+
+        // Backspace key can add <br type="_moz"> in Firefox
         // Puts cursor at proper place of the content editable element
         var focus_func = function() {
             var obj, range = document.createRange();
@@ -1110,7 +1149,7 @@ function rcube_elastic_ui()
             rcmail.env.focused_field = obj;
 
             // if there's a text node, put cursor at the end of it
-            if (obj = $(input).contents().filter(function() { return this.nodeType == 3; }).last()[0]) {
+            if (obj = get_text_node()) {
                 range.setStart(obj, $(obj).text().length);
             }
             // else if there's <br> put the cursor before it
@@ -1136,50 +1175,76 @@ function rcube_elastic_ui()
             selection.addRange(range);
         };
 
-        var parse_func = function(e) {
-            // TODO: BUG: backspace removes all recipients in Chrome
-            // TODO: it is possible to put cursor between recipient boxes, we should block this
-            // TODO: in onkeyup add recipient element on separator character?
+        var update_func = function() {
+            var node, text, recipients = [], cloned = input.clone();
 
-            // Note it can be also executed when autocomplete inserts a recipient
-            if (e.type.match(/^(change|paste|blur)$/)) {
-                var node, text, recipients = [], cloned = input.clone();
+            cloned.find('span').remove();
+            text = cloned.text().replace(/[,;\s]+$/, '');
+            recipients = recipient_input_parser(text);
 
-                cloned.find('span').remove();
-                text = cloned.text().replace(/[,;\s]+$/, '');
-                recipients = recipient_input_parser(text);
+            $.each(recipients, function() {
+                insert_recipient(this.name, this.email);
+                text = text.replace(this.text, '');
+            });
 
-                $.each(recipients, function() {
-                    insert_recipient(this.name, this.email);
-                    text = text.replace(this.text, '');
-                });
-
-                if (recipients.length) {
-                    // update text node
-                    text = $.trim(text.replace(/[,]{1,}/g, ',').replace(/(^,|,$)/g, ''));
-                    $(input).contents().each(function() { if (this.nodeType == 3) $(this).remove(); });
-                    input.children('span:last').after(document.createTextNode(text));
-                }
-
-                // update the original input
-                $(obj).val(input.text());
-
-                // fix cursor position
-                if (e.type != 'blur') {
-                    focus_func();
-                }
+            if (recipients.length) {
+                // update text node
+                text = $.trim(text.replace(/[,]{1,}/g, ',').replace(/(^,|,$)/g, ''));
+                $(input).contents().each(function() { if (this.nodeType == 3) $(this).remove(); });
+                input.children('span:last').after(document.createTextNode(text));
             }
 
-            // Backspace key can add <br type="_moz"> in Firefox
-            $('br[type=\"_moz\"]', this).remove();
+            return recipients.length > 0;
         };
 
+        var parse_func = function(e) {
+            // Note it can be also executed when autocomplete inserts a recipient
+            update_func();
+
+            // update the original input
+            $(obj).val(input.text());
+
+            // fix cursor position
+            if (e.type != 'blur') {
+                focus_func();
+            }
+        };
+
+        var keydown_func = function(e) {
+            // Backspace removes all recipients in Chrome, but in Firefox
+            // it does nothing. We'll consistently remove the last recipient
+            if (e.keyCode == 8) {
+                // check if we're on the far left side of the text entry node
+                var node = get_text_node(), selection = window.getSelection();
+                if ((node == selection.focusNode && !selection.focusOffset) || selection.anchorNode == input[0]) {
+                    input.children('span:last').remove();
+                    // update the original input
+                    $(obj).val(input.text());
+                    focus_func();
+                    return false;
+                }
+            }
+            // Here we add a recipient box when the separator character was pressed
+            else if (e.keyCode == 188) {
+                if (update_func()) {
+                    focus_func();
+                    return false;
+                }
+            }
+        };
+
+        // Create the content-editable div
         input = $('<div>')
             .attr({contenteditable: true, tabindex: $(obj).attr('tabindex')})
-            // todo aria attributes
             .addClass('form-control recipient-input')
-            .on('paste change blur keyup', parse_func)
-            .on('focus click', focus_func);
+            .on('paste change blur', parse_func)
+            .on('keydown', keydown_func)
+            .on('focus mousedown', focus_func)
+            .on('keyup', function() {
+                // Backspace key can add <br type="_moz"> in Firefox
+                // TODO: this fixes that, but causes input height jump effect
+                $('br[type=\"_moz\"]', this).remove();
+            });
 
         // "Replace" the original input/textarea with the content-editable div
         // Note: we do not remove the original element, and we do not use
@@ -1193,22 +1258,18 @@ function rcube_elastic_ui()
             .on('focus', function(e) { input.focus(); })
             .on('change', function(e) { input.text(this.value).change(); });
 
-        setTimeout(function() {
-            var ac_props;
+        // Copy and parse the value already set
+        input.text($(obj).val()).change();
 
-            // Copy and parse the value already set
-            input.text($(obj).val()).change();
+        if (rcmail.env.autocomplete_threads > 0) {
+            ac_props = {
+                threads: rcmail.env.autocomplete_threads,
+                sources: rcmail.env.autocomplete_sources
+            };
+        }
 
-            if (rcmail.env.autocomplete_threads > 0) {
-                ac_props = {
-                    threads: rcmail.env.autocomplete_threads,
-                    sources: rcmail.env.autocomplete_sources
-                };
-            }
-
-            // Init autocompletion
-            rcmail.init_address_input_events(input, ac_props);
-        }, 5);
+        // Init autocompletion
+        rcmail.init_address_input_events(input, ac_props);
     };
 
     /**
@@ -1242,13 +1303,54 @@ function rcube_elastic_ui()
 
     /**
      * Generates HTML for a text adding <span class="hidden">
-     * for quote/backslash characters, so it can be hidden from the user,
+     * for quote/backslash characters, so they are hidden from the user,
      * but still in place to make copying simpler
+     *
+     * Note: Selection works in Chrome, but not in Firefox?
      */
     function recipient_input_name(text)
     {
-        // TODO
-        return text;
+        var i, char, result = '', len = text.length;
+
+        if (text.charAt(0) != '"' && text.indexOf('"') > -1) {
+            text = '"' + text.replace('\\', '\\\\').replace('"', '\\"') + '"';
+        }
+
+        for (i=0; i<len; i++) {
+            char = text.charAt(i);
+            switch (char) {
+                case '"':
+                    if (i > 0 && i < len - 1) {
+                        result += '"';
+                        break;
+                    }
+
+                    result += '<span class="quotes">' + char + '</span>';
+                    break;
+
+                case '\\':
+                    result += '<span class="quotes">' + char + '</span>';
+
+                    if (text.charAt(i+1) == '\\') {
+                        result += char;
+                        i++;
+                    }
+                    break;
+
+                case '<':
+                    result += '&lt;';
+                    break;
+
+                case '>':
+                    result += '&gt;';
+                    break;
+
+                default:
+                    result += char;
+            }
+        }
+
+        return result;
     };
 
 }
