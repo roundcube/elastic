@@ -99,6 +99,23 @@ ul.treelist li {
     font-size: 0.85em;
 }
 
+@media screen and (max-width: @screen-width-xs) {
+    #messagestack {
+        font-size: 0.8em;
+    }
+}
+
+@media screen and (min-width: (@screen-width-xs + 1px)) and (max-width: (@screen-width-medium - 1px)) {
+    #countcontrols {
+        width: 100%;
+        text-align: right;
+    }
+
+    #messagestack {
+        width: 50%;
+    }
+}
+
 
 
 /*** Common UI elements ***/ // widgets/taskmenu.less
@@ -119,7 +136,7 @@ ul.treelist li {
     }
 }
 
-@media screen and (max-width: (@screen-width-medium - 1px)) {
+@media screen and (max-width: (@screen-width-large - 1px)) {
     #taskmenu {
         a.button {
             &:before {
