@@ -1,3 +1,14 @@
+/**
+ * Roundcube webmail styles for the Elastic skin
+ *
+ * Copyright (c) 2017, The Roundcube Dev Team
+ *
+ * The contents are subject to the Creative Commons Attribution-ShareAlike
+ * License. It is allowed to copy, distribute, transmit and to adapt the work
+ * by keeping credits to the original autors in the README file.
+ * See http://creativecommons.org/licenses/by-sa/3.0/ for details.
+ */
+
 @import (reference) "fontawesome.less";
 @import (reference) "colors.less";
 
@@ -225,44 +236,3 @@ button, input, select, textarea {
 #contactphoto { /* TODO */ }
 #contacthead { /* TODO */ }
 .contactfieldgroup { /* TODO */ }
-
-
-/*** Settings UI ***/
-
-.skinselection {
-    white-space: nowrap;
-    display: table-row;
-
-    & > span {
-        display: table-cell;
-        vertical-align: middle;
-        padding: 0.1em 0.5em;
-        white-space: normal;
-
-        &:last-child {
-            padding-right: 0;
-        }
-    }
-
-    .skinname {
-        font-weight: bold;
-    }
-
-    .skinlicense,
-    .skinlicense a {
-        font-style: italic;
-        text-decoration: none;
-    }
-
-    .skinlicense a:hover {
-        text-decoration: underline;
-    }
-
-    .skinthumbnail {
-        width: 64px;
-        height: 64px;
-        border: 1px solid #ccc; /* TODO */
-        background: #fff;
-        border-radius: 4px;
-    }
-}

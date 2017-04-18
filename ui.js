@@ -1,5 +1,5 @@
 /**
- * Roundcube functions for the elastic skin
+ * Roundcube webmail functions for the Elastic skin
  *
  * Copyright (c) 2017, The Roundcube Dev Team
  *
@@ -48,6 +48,7 @@ function rcube_elastic_ui()
     this.about_dialog = about_dialog;
     this.spellmenu = spellmenu;
     this.searchmenu = searchmenu;
+    this.headersmenu = headersmenu;
     this.attachmentmenu = attachmentmenu;
 
 
@@ -262,7 +263,7 @@ function rcube_elastic_ui()
         });
 
         // Forms
-        $('input,select', $('table.propform')).not('[type=checkbox]').addClass('form-control');
+        $('input,select,textarea', $('table.propform')).not('[type=checkbox]').addClass('form-control');
         $('[type=checkbox]', $('table.propform')).addClass('form-check-input');
         $('table.propform > tbody > tr').each(function() {
             var row = $(this),
@@ -311,6 +312,12 @@ function rcube_elastic_ui()
             nav.append(tabs).insertBefore(item);
             // activate the first tab
             $('a.nav-link:first', nav).click();
+        });
+
+        // Make message-objects alerts pretty (the same as UI alerts)
+        $('#message-objects').children('div').each(function() {
+            alert_style(this, $(this).attr('class'));
+            $('a', this).addClass('btn btn-primary');
         });
 
         // Make logon form prettier
@@ -401,7 +408,7 @@ function rcube_elastic_ui()
         // FIXME: only for mobile?
         if (mode == 'phone') {
             // Enable autoresize plugin
-            // TODO: autoresize for plain text editor area
+            // TODO: autoresize for plain text editor area?
             o.config.plugins += ' autoresize';
 
             // Make the toolbar icons bigger
@@ -409,6 +416,10 @@ function rcube_elastic_ui()
 
             // Use minimalistic toolbar
             o.config.toolbar = 'undo redo | insert | styleselect';
+
+            if (o.config.plugins.match(/emoticons/)) {
+                o.config.toolbar += ' emoticons';
+            }
         }
     };
 
@@ -618,22 +629,8 @@ function rcube_elastic_ui()
      */
     function message_displayed(p)
     {
-        var cl, classes = 'ui alert',
-            map = {
-                information: 'alert-success',
-                confirmation: 'alert-success',
-                notice: 'alert-info',
-                error: 'alert-danger',
-                warning: 'alert-warning',
-                loading: 'alert-info loading'
-            };
-
-        if (cl = map[p.type]) {
-            classes += ' ' + cl;
-            $('<i>').attr('class', 'icon').prependTo(p.object);
-        }
-
-        $(p.object).addClass(classes).attr('role', 'alert');
+        alert_style(p.object, p.type);
+        $(p.object).attr('role', 'alert');
         $('a', p.object).addClass('alert-link');
 /*
         var siblings = $(p.object).siblings('div');
@@ -647,6 +644,29 @@ function rcube_elastic_ui()
         }
 */
     };
+
+    /**
+     * Applies some styling and icon to an alert object
+     */
+    function alert_style(object, type)
+    {
+        var cl, classes = 'ui alert',
+            map = {
+                information: 'alert-success',
+                confirmation: 'alert-success',
+                notice: 'alert-info',
+                error: 'alert-danger',
+                warning: 'alert-warning',
+                loading: 'alert-info loading'
+            };
+
+        if (cl = map[type]) {
+            classes += ' ' + cl;
+            $('<i>').attr('class', 'icon').prependTo(object);
+        }
+
+        $(object).addClass(classes);
+    }
 
     /**
      * Initializes searchbar widget
@@ -1096,6 +1116,19 @@ function rcube_elastic_ui()
     };
 
     /**
+     * Headers menu in mail compose
+     */
+    function headersmenu(obj, button, event)
+    {
+        $('li > a', obj).each(function() {
+            var target = '#compose_' + $(this).data('target');
+
+            $(this)[$(target).is(':visible') ? 'removeClass' : 'addClass']('active')
+                .off().on('click', function() { $(target).removeClass('hidden'); });
+        });
+    };
+
+    /**
      * Replaces recipient input with content-editable element that uses "recipient boxes"
      */
     function recipient_input(obj)
@@ -1257,6 +1290,10 @@ function rcube_elastic_ui()
             // to the widget element
             .on('focus', function(e) { input.focus(); })
             .on('change', function(e) { input.text(this.value).change(); });
+
+        // this one line is here to fix border of Bootstrap's input-group
+        // input-group should not contain any hidden elements
+        $(obj).detach().insertBefore(input.parent());
 
         // Copy and parse the value already set
         input.text($(obj).val()).change();

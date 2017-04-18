@@ -1,3 +1,14 @@
+/**
+ * Roundcube webmail styles for the Elastic skin
+ *
+ * Copyright (c) 2017, The Roundcube Dev Team
+ *
+ * The contents are subject to the Creative Commons Attribution-ShareAlike
+ * License. It is allowed to copy, distribute, transmit and to adapt the work
+ * by keeping credits to the original autors in the README file.
+ * See http://creativecommons.org/licenses/by-sa/3.0/ for details.
+ */
+
 /*** UI Messages ***/
 
 #messagestack {
@@ -64,27 +75,10 @@
     }
 }
 
-/* TODO: #message-objects colors, make <a> buttons, icons using <i>? */
+#message-objects {
+    margin: 0 0.2em;
 
-#message-objects div {
-    margin: 0;
-    margin-bottom: 0.2em;
-    width: 100%;
-    padding: 0.75em;
-
-    &:before {
-        &:extend(.font-icon-class);
-    }
-
-    &.notice:before {
-        content: @fa-var-info-circle;
-    }
-
-    &.warning:before {
-        content: @fa-var-warning;
-    }
-
-    &.error:before {
-        content: @fa-var-exclamation-circle;
+    i.icon {
+        font-size: 2em !important;
     }
 }
