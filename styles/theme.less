@@ -7,9 +7,9 @@
     display: flex;
 }
 
-.flex-grow(@grow) {
-    -ms-flex: @grow;
-    flex-grow: @grow;
+.flex(@nb) {
+    -ms-flex: @nb;
+    flex: @nb;
 }
 
 .flex-direction(@direction) {
@@ -39,24 +39,31 @@ body > #layout {
         &.sidebar,
         &.list {
             .flex-display();
-            .flex-grow(2);
             .flex-direction(column);
         }
 
         &.content {
             .flex-display();
-            .flex-grow(6);
+            .flex(6);
             .flex-direction(column);
 
             & > iframe,
             & > .content,
             & > .content > iframe {
-                -ms-flex: 1;
+                .flex(1);
             }
         }
 
+        &.sidebar {
+            .flex(2);
+        }
+
+        &.list {
+            .flex(3);
+        }
+
         & > .scroller {
-            -ms-flex: 1;
+            .flex(1);
         }
 
         & > .header,
@@ -69,7 +76,7 @@ body > #layout {
 
         & > .header {
             .header-title {
-                -ms-flex: 1;
+                .flex(1);
             }
         }
 /*
@@ -93,6 +100,10 @@ body > #layout {
 }
 
 @media screen and (max-width: @screen-width-large) {
+    body > #layout > div.sidebar,
+    body > #layout > div.list {
+        .flex(3);
+    }
     body > #layout > div.menu,
     body > #layout > div.content {
         .flex-display();
@@ -229,13 +240,13 @@ ul.treelist li {
         .flex-display();
 
         a.button:first-child {
-            -ms-flex: 1;
+            .flex(1);
         }
     }
 }
 
 @media screen and (min-width: (@screen-width-small + 1px)) {
     ul.toolbar {
-        -ms-flex: 1;
+        .flex(1);
     }
 }
