@@ -126,7 +126,7 @@ button, input, select, textarea {
   }
 }
 
-.animated-icon-class {
+.animated-icon-class() {
     -webkit-animation: fa-spin 2s infinite linear;
     animation: fa-spin 2s infinite linear;
 }
@@ -207,7 +207,15 @@ button, input, select, textarea {
     margin: auto;
     width: 95%;
     max-width: 280px;
+
+    /* Fixes input width and position in IE11 */
+    .row {
+        max-width: 280px;
+        margin-right: 0;
+        margin-left: 0;
+    }
 }
+
 
 
 /*** Addressbook UI ***/
