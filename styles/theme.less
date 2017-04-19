@@ -1,30 +1,52 @@
 @import "styles.less";
 
+/*** Mixins ***/
+
+.flex-display {
+    display: -ms-flexbox;
+    display: flex;
+}
+
+.flex-grow(@grow) {
+    -ms-flex: @grow;
+    flex-grow: @grow;
+}
+
+.flex-direction(@direction) {
+    -ms-flex-direction: @direction;
+    flex-direction: @direction;
+}
+
+.flex-wrap(@wrap) {
+    -ms-flex-wrap: @wrap;
+    flex-wrap: @wrap;
+}
+
 
 
 /*** Responsive design - Layout ***/ // layout.less
 
 body > #layout {
-    display: -ms-flexbox;
-    -ms-flex-direction: row;
-    -ms-flex-wrap: nowrap;
+    .flex-display();
+    .flex-direction(row);
+    .flex-wrap(nowrap);
 
     & > div {
         &.menu {
-            display: -ms-flexbox;
+            .flex-display();
         }
 
         &.sidebar,
         &.list {
-            display: -ms-flexbox;
-            -ms-flex: 2;
-            -ms-flex-direction: column;
+            .flex-display();
+            .flex-grow(2);
+            .flex-direction(column);
         }
 
         &.content {
-            display: -ms-flexbox;
-            -ms-flex: 6;
-            -ms-flex-direction: column;
+            .flex-display();
+            .flex-grow(6);
+            .flex-direction(column);
 
             & > iframe,
             & > .content,
@@ -40,9 +62,9 @@ body > #layout {
         & > .header,
         & > .footer {
             padding: 0 0.5em;
-            display: -ms-flexbox;
-            -ms-flex-direction: row;
-            -ms-flex-wrap: nowrap;
+            .flex-display();
+            .flex-direction(row);
+            .flex-wrap(nowrap);
         }
 
         & > .header {
@@ -67,6 +89,19 @@ body > #layout {
             }
         }
 */
+    }
+}
+
+@media screen and (max-width: @screen-width-large) {
+    body > #layout > div.menu,
+    body > #layout > div.content {
+        .flex-display();
+    }
+}
+
+@media screen and (max-width: @screen-width-small) {
+    body > #layout > div.menu {
+        .flex-display();
     }
 }
 
@@ -188,6 +223,16 @@ ul.treelist li {
 
 
 /*** Toolbar widget ***/ // widgets/toolbar.less
+
+.popupmenu.toolbar.listing {
+    .dropbutton {
+        .flex-display();
+
+        a.button:first-child {
+            -ms-flex: 1;
+        }
+    }
+}
 
 @media screen and (min-width: (@screen-width-small + 1px)) {
     ul.toolbar {
