@@ -5,12 +5,51 @@
 /*** Responsive design - Layout ***/ // layout.less
 
 body > #layout {
+    display: -ms-flexbox;
+    -ms-flex-direction: row;
+    -ms-flex-wrap: nowrap;
+
     & > div {
+        &.menu {
+            display: -ms-flexbox;
+        }
+
+        &.sidebar,
+        &.list {
+            display: -ms-flexbox;
+            -ms-flex: 2;
+            -ms-flex-direction: column;
+        }
+
+        &.content {
+            display: -ms-flexbox;
+            -ms-flex: 6;
+            -ms-flex-direction: column;
+
+            & > iframe,
+            & > .content,
+            & > .content > iframe {
+                -ms-flex: 1;
+            }
+        }
+
+        & > .scroller {
+            -ms-flex: 1;
+        }
+
         & > .header,
         & > .footer {
             padding: 0 0.5em;
+            display: -ms-flexbox;
+            -ms-flex-direction: row;
+            -ms-flex-wrap: nowrap;
         }
 
+        & > .header {
+            .header-title {
+                -ms-flex: 1;
+            }
+        }
 /*
         & > .footer {
             #listcontrols {
@@ -151,7 +190,7 @@ ul.treelist li {
 /*** Toolbar widget ***/ // widgets/toolbar.less
 
 @media screen and (min-width: (@screen-width-small + 1px)) {
-    ul.toolbar > li {
-        display: inline-flex;
+    ul.toolbar {
+        -ms-flex: 1;
     }
 }
