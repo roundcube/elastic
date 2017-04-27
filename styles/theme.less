@@ -24,6 +24,32 @@
 
 
 
+/*** Stuff ***/
+
+.ui-dialog.ui-widget {
+    .ui-dialog-titlebar {
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
+
+    .ui-dialog-title {
+        font-family: Roboto, sans-serif;
+        font-size: 1.5em;
+    }
+}
+
+html.iframe body {
+    padding: 10px;
+}
+
+.compose-headers {
+    select.form-control:not([size]):not([multiple]) {
+        .flex-direction(row);
+    }
+}
+
+
+
 /*** Responsive design - Layout ***/ // layout.less
 
 body > #layout {
@@ -79,23 +105,6 @@ body > #layout {
                 .flex(1);
             }
         }
-/*
-        & > .footer {
-            #listcontrols {
-                &:extend(.font-icon-class);
-                width: auto;
-                height: auto;
-
-                a.listmode:before {
-                    content: @fa-var-list;
-                }
-
-                a.threadmode:before {
-                    content: @fa-var-comments;
-                }
-            }
-        }
-*/
     }
 }
 
@@ -129,6 +138,9 @@ body > #layout {
 ul.listing {
     li {
         overflow: visible;
+        &.root {
+            line-height: 0.5em;
+        }
     }
 }
 
@@ -173,6 +185,13 @@ ul.treelist li {
             height: 1.7em;
             margin-left: 0;
         }
+    }
+}
+
+.list {
+    .countdisplay {
+        width: 100%;
+        text-align: right;
     }
 }
 
