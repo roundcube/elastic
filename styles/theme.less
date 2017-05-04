@@ -113,9 +113,16 @@ body > #layout {
     body > #layout > div.list {
         .flex(3);
     }
+
     body > #layout > div.menu,
     body > #layout > div.content {
         .flex-display();
+    }
+
+    body > #layout > div.menu a,
+    body > #layout > div.menu a:before,
+    body > #layout > div.menu {
+        width: 50px;
     }
 }
 
@@ -236,16 +243,6 @@ ul.treelist li {
     #taskmenu {
         .action-buttons, .special-buttons {
             display: block;
-        }
-    }
-}
-
-@media screen and (max-width: (@screen-width-large - 1px)) {
-    #taskmenu {
-        a.button {
-            &:before {
-                font-size: 1.4em;
-            }
         }
     }
 }
