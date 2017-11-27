@@ -1,0 +1,268 @@
+@import "styles.less";
+
+/*** Mixins ***/
+
+.flex-display {
+    display: -ms-flexbox;
+    display: flex;
+}
+
+.flex(@nb) {
+    -ms-flex: @nb;
+    flex: @nb;
+}
+
+.flex-direction(@direction) {
+    -ms-flex-direction: @direction;
+    flex-direction: @direction;
+}
+
+.flex-wrap(@wrap) {
+    -ms-flex-wrap: @wrap;
+    flex-wrap: @wrap;
+}
+
+
+
+/*** Stuff ***/
+
+.ui-dialog.ui-widget {
+    .ui-dialog-titlebar {
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
+
+    .ui-dialog-title {
+        font-family: Roboto, sans-serif;
+        font-size: 1.5em;
+    }
+}
+
+html.iframe body {
+    padding: 10px;
+}
+
+.compose-headers {
+    select.form-control:not([size]):not([multiple]) {
+        .flex-direction(row);
+    }
+}
+
+
+
+/*** Responsive design - Layout ***/ // layout.less
+
+body > #layout {
+    .flex-display();
+    .flex-direction(row);
+    .flex-wrap(nowrap);
+
+    & > div {
+        &.menu {
+            .flex-display();
+        }
+
+        &.sidebar,
+        &.list {
+            .flex-display();
+            .flex-direction(column);
+        }
+
+        &.content {
+            .flex-display();
+            .flex(6);
+            .flex-direction(column);
+
+            & > iframe,
+            & > .content,
+            & > .content > iframe {
+                .flex(1);
+            }
+        }
+
+        &.sidebar {
+            .flex(2);
+        }
+
+        &.list {
+            .flex(3);
+        }
+
+        & > .scroller {
+            .flex(1);
+        }
+
+        & > .header,
+        & > .footer {
+            padding: 0 0.5em;
+            .flex-display();
+            .flex-direction(row);
+            .flex-wrap(nowrap);
+        }
+
+        & > .header {
+            .header-title {
+                .flex(1);
+            }
+        }
+    }
+}
+
+@media screen and (max-width: @screen-width-large) {
+    body > #layout > div.sidebar,
+    body > #layout > div.list {
+        .flex(3);
+    }
+
+    body > #layout > div.menu,
+    body > #layout > div.content {
+        .flex-display();
+    }
+
+    body > #layout > div.menu a,
+    body > #layout > div.menu a:before,
+    body > #layout > div.menu {
+        width: 50px;
+    }
+}
+
+@media screen and (max-width: @screen-width-small) {
+    body > #layout > div.menu {
+        .flex-display();
+    }
+}
+
+
+
+/*** List and treelist widgets ***/ // widgets/list.less
+
+.listing {
+    td.selection {
+        width: 2.25em;
+    }
+}
+
+ul.listing {
+    li {
+        overflow: visible;
+        &.root {
+            line-height: 0.5em;
+        }
+    }
+}
+
+ul.treelist li {
+    div.treetoggle {
+        left: 1.2em;
+
+        &.expanded:before {
+            font-size: 1em;
+        }
+
+        &.collapsed:before {
+            font-size: 1em;
+        }
+    }
+}
+
+.folderlist {
+    li {
+        &.mailbox {
+            .unreadcount {
+                margin: 0.5em 0.5em 0.5em 0.2em;
+            }
+        }
+    }
+}
+
+.messagelist {
+    td.subject {
+        padding: 0;
+
+        span.date {
+            top: 0;
+        }
+    }
+
+    td.flags {
+        line-height: 2em;
+        padding: 0 0.4em;
+
+        span {
+            height: 1.7em;
+            margin-left: 0;
+        }
+    }
+}
+
+.list {
+    .countdisplay {
+        width: 100%;
+        text-align: right;
+    }
+}
+
+
+
+/*** UI Messages ***/
+
+#messagestack {
+    font-size: 0.85em;
+}
+
+@media screen and (max-width: @screen-width-xs) {
+    #messagestack {
+        font-size: 0.8em;
+    }
+}
+
+@media screen and (min-width: (@screen-width-xs + 1px)) and (max-width: (@screen-width-medium - 1px)) {
+    #countcontrols {
+        width: 100%;
+        text-align: right;
+    }
+
+    #messagestack {
+        width: 50%;
+    }
+}
+
+
+
+/*** Common UI elements ***/ // widgets/taskmenu.less
+
+#taskmenu {
+    a.button {
+        span {
+            font-size: 0.85em;
+        }
+    }
+}
+
+@media screen and (max-width: @screen-width-xs) {
+    #taskmenu {
+        .action-buttons, .special-buttons {
+            display: block;
+        }
+    }
+}
+
+
+
+/*** Toolbar widget ***/ // widgets/toolbar.less
+
+.popupmenu.toolbar.listing {
+    .dropbutton {
+        .flex-display();
+
+        a.button:first-child {
+            .flex(1);
+        }
+    }
+}
+
+@media screen and (min-width: (@screen-width-small + 1px)) {
+    ul.toolbar {
+        .flex(1);
+    }
+}
