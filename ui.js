@@ -72,7 +72,7 @@ function rcube_elastic_ui()
     this.form_errors = form_errors;
     this.switch_nav_list = switch_nav_list;
     this.searchbar_init = searchbar_init;
-    this.pretty_checkbox = pretty_checkbox;
+    this.pretty_checkbox_radio = pretty_checkbox_radio;
 
 
     // Initialize layout
@@ -279,7 +279,7 @@ function rcube_elastic_ui()
         // Modify normal checkboxes on lists so they are different
         // than those used for row selection, i.e. use icons
         $('[data-list]').each(function() {
-            $('input[type=checkbox]', this).each(function() { pretty_checkbox(this); });
+            $('input[type=checkbox],input[type=radio]', this).each(function() { pretty_checkbox_radio(this); });
         });
 
         // Assign .formcontainer class to the iframe body, when it
@@ -681,7 +681,7 @@ function rcube_elastic_ui()
 
         // Forms
         $('input:not(.button,[type=file],[type=radio],[type=checkbox]),select,textarea', $('.propform', context)).addClass('form-control');
-        $('[type=checkbox]', $('.propform', context)).addClass('form-check-input');
+        $('[type=checkbox],[type=radio]', $('.propform', context)).addClass('form-check-input');
         $('table.propform', context).each(function() {
             var text_rows = 0, form_rows = 0;
 
@@ -698,7 +698,7 @@ function rcube_elastic_ui()
                     first.addClass('col-sm-4');
                     last.addClass('col-sm-8');
 
-                    if (last.find('[type=checkbox]').length == 1 && !last.find('.proplist').length) {
+                    if (last.find('[type=checkbox],[type=radio]').length == 1 && !last.find('.proplist').length) {
                         row_classes.push('form-check');
 
                         if (last.find('a').length) {
@@ -839,12 +839,12 @@ function rcube_elastic_ui()
 
         // The same for some other checkboxes
         // We do this here, not in setup() because we want to cover dialogs
-        $('.propform input[type=checkbox], .form-check > input, .popupmenu.form input[type=checkbox], .toolbarmenu input[type=checkbox]', context)
-            .each(function() { pretty_checkbox(this); });
+        $('.propform input[type=checkbox], .propform input[type=radio], .form-check > input, .popupmenu.form input[type=checkbox], .popupmenu.form input[type=radio], .toolbarmenu input[type=checkbox], .toolbarmenu input[type=radio]', context)
+            .each(function() { pretty_checkbox_radio(this); });
 
         // Also when we add action-row of the form, e.g. Managesieve plugin adds them after the page is ready
         if ($(context).is('.actionrow')) {
-            $('input[type=checkbox]', context).each(function() { pretty_checkbox(this); });
+            $('input[type=checkbox],input[type=radio]', context).each(function() { pretty_checkbox_radio(this); });
         }
 
         // Make message-objects alerts pretty (the same as UI alerts)
@@ -2782,21 +2782,21 @@ function rcube_elastic_ui()
     };
 
     /**
-     * Checkbox wrapper
+     * Checkbox/radio wrapper
      */
-    function pretty_checkbox(checkbox)
+    function pretty_checkbox_radio(input)
     {
-        var checkbox = $(checkbox),
-            id = checkbox.attr('id');
+        var input = $(input),
+            id = input.attr('id');
 
         if (!id) {
-            if (!env.icon_checkbox) env.icon_checkbox = 0;
-            id = 'icochk' + (++env.icon_checkbox);
-            checkbox.attr('id', id);
+            if (!env.icon_checkbox_radio) env.icon_checkbox_radio = 0;
+            id = 'icochkrdo' + (++env.icon_checkbox_radio);
+            input.attr('id', id);
         }
 
-        checkbox.addClass('icon-checkbox form-check-input').after(
-            $('<label>').attr({'for': id, title: checkbox.attr('title') || ''})
+        input.addClass('icon-checkbox-radio form-check-input').after(
+            $('<label>').attr({'for': id, title: input.attr('title') || ''})
                 .on('click', function(e) { e.stopPropagation(); })
         );
     };

@@ -457,7 +457,7 @@ html.ms .propform {
 
             & > *:last-child {
                 width: 1%;
-                min-width: 2.2em; // for icon-checkbox
+                min-width: 2.2em; // for icon-checkbox-radio
                 padding-right: 15px;
             }
 
@@ -617,7 +617,7 @@ ul.proplist {
             margin: 0;
         }
 
-        .icon-checkbox {
+        .icon-checkbox-radio {
             height: 2.4rem !important;
             margin-left: -1.2em;
 
@@ -695,7 +695,7 @@ ul.proplist {
 
 html.touch .popupmenu.form {
     li {
-        input.icon-checkbox + label:before {
+        input.icon-checkbox-radio + label:before {
             line-height: 1.4;
         }
     }
@@ -1068,9 +1068,9 @@ html.touch .popupmenu.form {
 }
 
 
-/*** Pretty icon checkbox ***/
+/*** Pretty icon checkbox and radio ***/
 
-input.icon-checkbox {
+input.icon-checkbox-radio {
     opacity: 0;
     margin-left: -1.5em;
     cursor: pointer;
@@ -1113,17 +1113,36 @@ input.icon-checkbox {
         pointer-events: none;
     }
 
-    &:checked + label:before {
+    &[type="checkbox"]:checked + label:before {
         content: @fa-var-toggle-on;
         color: @color-checkbox-checked;
     }
 
-    &:focus + label:before {
+    &[type="radio"] + label:before {
+        .font-icon-regular(@fa-var-circle);
+        font-size: 1em;
+        color: @color-radio;
+    }
+
+    &[type="radio"]:checked + label:before {
+        .font-icon-solid(@fa-var-check-circle);
+        color: @color-radio-checked;
+    }
+
+    &[type="checkbox"]:focus + label:before {
         color: @color-checkbox-focus;
     }
 
-    &:checked:focus + label:before {
+    &[type="checkbox"]:checked:focus + label:before {
         color: @color-checkbox-checked-focus;
+    }
+
+    &[type="radio"]:focus + label:before {
+        color: @color-radio-focus;
+    }
+
+    &[type="radio"]:checked:focus + label:before {
+        color: @color-radio-checked-focus;
     }
 
     &.form-check-input + label {
@@ -1132,7 +1151,7 @@ input.icon-checkbox {
     }
 }
 
-html.touch input.icon-checkbox + label {
+html.touch input.icon-checkbox-radio + label {
     font-size: 1.5rem;
 }
 
